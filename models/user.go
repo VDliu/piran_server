@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"errors"
+	"github.com/astaxie/beego/orm"
 )
 
 
@@ -20,8 +21,10 @@ func AddUser(nick_name,invite_code,pwd string) (error) {
 		return errors.New("user exit")
 	}
 
+	o := orm.NewOrm();
+
 	user := User{Nick_name:nick_name,Invite_code:invite_code,Password:pwd}
-	id,err := Omer.Insert(&user)
+	id,err := o.Insert(&user)
 
 	if err ==nil && id > -1 {
 		return nil
@@ -33,32 +36,36 @@ func AddUser(nick_name,invite_code,pwd string) (error) {
 
 func userExit(invite_code string)(error,bool)  {
 	user := User{}
-	err := Omer.QueryTable("user").Filter("invite_code",invite_code).One(&user)
+	o := orm.NewOrm();
+	err := o.QueryTable("user").Filter("invite_code",invite_code).One(&user)
 
 	//err ！= nil表示有错，用户此时不存在，== nil表示用户存在
 	return err,err == nil
 }
 
-func UpdateUser(user *User) (error) {
-	_,err := Omer.Update(user)
+func UpdateUser(user *User,o orm.Ormer) (error) {
+	_,err := o.Update(user)
 	return err
 }
 
 func QueryUserById(id int64)(User,error)  {
+	o := orm.NewOrm();
 	user := User{Id:id}
-	err := Omer.Read(&user)
+	err := o.Read(&user)
 	return user,err
 }
 
 func UserInfo(id int64) (*User ,error) {
+	o := orm.NewOrm();
 	user := User{Id:id}
-	err := Omer.Read(&user)
+	err := o.Read(&user)
 	return &user,err
 }
 
 func Users() (* []User) {
+	o := orm.NewOrm();
 	users := make([]User, 0)
-	_,err := Omer.Raw("select * from user").QueryRows(&users)
+	_,err := o.Raw("select * from user").QueryRows(&users)
 	if err == nil {
 		return &users;
 	}

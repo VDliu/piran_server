@@ -6,7 +6,6 @@ import  (
 	"fmt"
 )
 
-var Omer orm.Ormer
 
 func init(){
 	// 注册驱动
@@ -15,8 +14,8 @@ func init(){
 	orm.RegisterDataBase("default", "mysql", "root:123456789@rain@/pirain?charset=utf8")
 
 	orm.RegisterModel(new (User))
-	orm.RegisterModel(new (Transc))
-	Omer = orm.NewOrm()
+	orm.RegisterModel(new (Charge))
+	orm.RegisterModel(new (Transition))
 	orm.Debug = true
 
 	//Qb, _ := orm.NewQueryBuilder("mysql")

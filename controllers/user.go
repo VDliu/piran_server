@@ -6,6 +6,7 @@ import (
 	"pirain_server/bean/req"
 	"pirain_server/common"
 	"pirain_server/models"
+	"fmt"
 )
 
 
@@ -43,7 +44,7 @@ func (c *UserController) Register() {
 
 func (c *UserController) UserCharge() {
 	res := common.Res{}
-	req := models.Transc{Amount:10.0,User:1,Charge_man:"huzi"}
+	req := models.Charge{Amount:-10.0,User:1,Charge_man:"huzi"}
 	//err := json.Unmarshal(c.Ctx.Input.RequestBody, &req)
 	//if err != nil {
 	//	res.SetRes(1,"error parms",false)
@@ -73,6 +74,22 @@ func (c *UserController) Get() {
 		c.TplName = "index.tpl"
 	}else {
 		c.Ctx.WriteString("error")
+	}
+
+}
+
+func (c *UserController) Trans() {
+	tran := models.Transition{FromId:1,ToId:3,Amount:1,FromInvite:"huzi",ToInvite:"222"}
+	s := make([]models.Transition,0)
+	s2 := append(s,tran)
+
+	fmt.Printf("controoler---- %d len\\n",len(s2))
+	err := models.Transtion(s2)
+
+	if err != nil {
+		c.Ctx.WriteString(err.Error())
+	}else {
+		c.Ctx.WriteString("tans ok")
 	}
 
 }
